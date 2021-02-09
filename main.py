@@ -54,8 +54,8 @@ async def text_to_speech(ctx, *args):
     engine.runAndWait()
 
     # make bot join voice channel
-    voice_channel = ctx.message.author.voice.channel
-    if voice_channel is not None:
+    try:
+        voice_channel = ctx.message.author.voice.channel
         vc = await voice_channel.connect()
 
         # get and play audio
@@ -68,6 +68,10 @@ async def text_to_speech(ctx, *args):
 
         # disconnect bot
         await vc.disconnect()
+
+    # user is not in channel
+    except AttributeError:
+        await ctx.send('You are not currently in a voice channel!')
 
 
 # running the bot
